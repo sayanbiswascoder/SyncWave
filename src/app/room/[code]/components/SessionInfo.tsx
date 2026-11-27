@@ -230,7 +230,7 @@ export default function SessionInfo({ code }: { code: string }) {
 
           const state = presenceChannel.presenceState();
           const onlineUsers = Object.values(state)
-            .flat() as PresenceMember[];
+            .flat() as unknown as PresenceMember[];
 
           const uniqueUsers = Array.from(
             new Map(
@@ -246,13 +246,13 @@ export default function SessionInfo({ code }: { code: string }) {
           if (cancelled || !presenceChannel) return;
 
           if (status === "SUBSCRIBED") {
-            const { error: trackError } = await presenceChannel.track({
+            const trackStatus = await presenceChannel.track({
               user_id: user.id,
               username,
               online_at: new Date().toISOString(),
             });
 
-            if (trackError) {
+            if (trackStatus !== "ok") {
               setPresenceError("Unable to publish online status.");
             } else {
               setPresenceError("");
@@ -279,7 +279,7 @@ export default function SessionInfo({ code }: { code: string }) {
 
               const state = presenceChannel?.presenceState() ?? {};
               const onlineUsers = Object.values(state)
-                .flat() as PresenceMember[];
+                .flat() as unknown as PresenceMember[];
               onlineUsersRef.current = onlineUsers;
 
               await loadMembers(
