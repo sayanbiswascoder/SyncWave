@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import {
   AudioWaveform,
@@ -22,13 +22,17 @@ import { generateGuestName } from "@/lib/identity";
 export default function Home() {
   const router = useRouter();
 
-  const [username, setUsername] = useState(() => generateGuestName());
+  const [username, setUsername] = useState("");
   const [roomName, setRoomName] = useState("Late Night Vibes");
   const [roomCode, setRoomCode] = useState("");
 
   const [mode, setMode] = useState<"create" | "join">("create");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+useEffect(() => {
+    setUsername(generateGuestName());
+  }, []);
 
   async function handleContinue() {
     setError("");
